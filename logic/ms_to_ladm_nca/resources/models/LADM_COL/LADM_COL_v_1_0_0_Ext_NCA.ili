@@ -1,0 +1,166 @@
+INTERLIS 2.3;
+
+/** Modelo extendido de Nacimientos de agua. 
+ * 
+ * El modelo extendido de Nacimientos de agua permite gestionar la información relativa a la identificación, localización y delimitación de los nacimientos y afloramientos de agua del territorio nacional, estandarizando los dominios, atributos y relaciones asociados al punto de afloramiento, su área forestal protectora, con el objetivo de facilitar el intercambio de datos entre las autoridades ambientales, los entes territoriales y los demás niveles sectoriales que intervienen en la protección de los nacimientos de agua.
+ */
+!!@ technicalContact="Dirección de Bosques, Biodiversidad y Servicios Ecosistémicos"
+MODEL LADM_COL_v_1_0_0_Ext_NCA (es)
+AT "mailto:Obosques@minambiente.gov.co"
+VERSION "1.0.0"  =
+  IMPORTS LADM_COL_v_4_0_1_Nucleo;
+
+  DOMAIN
+
+    /** Tipo de derecho asociado al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Tipo de derecho"
+    NCA_DerechoTipo = (
+      /** Derecho de aprovechamiento del agua otorgado por la autoridad ambiental competente mediante acto administrativo, con caudal, uso y vigencia definidos.
+       */
+      !!@ ili2db.dispName=Aprovechar
+      Aprovechar
+    );
+
+    /** Define el acto administrativo asociado al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Tipo de fuente administrativa"
+    NCA_FuenteAdministrativaTipo
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_FuenteAdministrativaTipo = (
+      !!@ ili2db.dispName="Documento público"
+      Documento_Publico(
+        /** Decisión administrativa emitida por una autoridad administrativa en ejercicio de sus funciones, que tiene efectos jurídicos dentro de su ámbito de competencia. Las resoluciones se utilizan para regular, interpretar, aplicar o ejecutar disposiciones legales o reglamentarias y son de carácter obligatorio para las personas o entidades a las que se dirigen.
+         */
+        !!@ ili2db.dispName="(Documento público) Resolución"
+        Resolucion
+      )
+    );
+
+    /** Tipo de responsabilidad asociada al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Tipo de responsabilidad"
+    NCA_ResponsabilidadTipo = (
+      /** Obligación de la autoridad ambiental competente de identificar, georreferenciar y registrar el nacimiento de agua y delimitar su área de protección, como soporte para la gestión y protección del recurso hídrico.
+       */
+      !!@ ili2db.dispName=Identificar
+      Identificar
+    );
+
+  TOPIC NCA
+  EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo =
+    BASKET OID AS INTERLIS.UUIDOID;
+    OID AS INTERLIS.UUIDOID;
+    DEPENDS ON LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo;
+
+    /** Agrupa los interesados relacionados con los nacimientos de agua, de acuerdo con su participación, competencia o relación con la gestión y administración.
+     */
+    !!@ ili2db.dispName="(NCA) Agrupación de interesados"
+    CLASS NCA_AgrupacionInteresados
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_AgrupacionInteresados =
+    END NCA_AgrupacionInteresados;
+
+    /** Define el tipo de derecho asociado al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Derecho"
+    CLASS NCA_Derecho
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_DRR =
+      /** Establece el tipo de Derecho asociado con el nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Tipo de derecho"
+      Tipo : MANDATORY LADM_COL_v_1_0_0_Ext_NCA.NCA_DerechoTipo;
+    END NCA_Derecho;
+
+    /** Identifica el tipo de acto administrativo relacionado con el nacimiento de agua, ya sea para su identificación o para la adopción de la determinante ambiental.
+     */
+    !!@ ili2db.dispName="(NCA) Fuente Administrativa"
+    CLASS NCA_FuenteAdministrativa
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_FuenteAdministrativa =
+      /** Define el tipo de acto administrativo.
+       */
+      !!@ ili2db.dispName="Tipo de Fuente Administrativa"
+      Tipo (EXTENDED) : MANDATORY LADM_COL_v_1_0_0_Ext_NCA.NCA_FuenteAdministrativaTipo;
+    END NCA_FuenteAdministrativa;
+
+    !!@ ili2db.dispName="(NCA) Fuente espacial"
+    CLASS NCA_FuenteEspacial
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_FuenteEspacial =
+    END NCA_FuenteEspacial;
+
+    /** Identifica el interesado asociado con los derechos, restricciones y responsabilidades (DRR) del nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Interesado"
+    CLASS NCA_Interesado
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_Interesado =
+      /** Sigla de la autoridad ambiental.
+       */
+      Sigla : TEXT*20;
+      !!@ ili2db.dispName="Observación Interesado"
+      Observacion : TEXT*255;
+    END NCA_Interesado;
+
+    !!@ ili2db.dispName="(NCA) NU Agrupación unidades espaciales"
+    CLASS NCA_NU_AgrupacionUnidadesEspaciales
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_AgrupacionUnidadesEspaciales =
+    END NCA_NU_AgrupacionUnidadesEspaciales;
+
+    !!@ ili2db.dispName="(NCA) NU Cadenas caras límite"
+    CLASS NCA_NU_CadenaCarasLimite
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_CadenaCarasLimite =
+    END NCA_NU_CadenaCarasLimite;
+
+    !!@ ili2db.dispName="(NCA) NU Punto"
+    CLASS NCA_NU_Punto
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_Punto =
+    END NCA_NU_Punto;
+
+    /** Define el tipo de responsabilidad asociado al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) Responsabilidad"
+    CLASS NCA_Responsabilidad
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_DRR =
+      /** Establece el tipo de responsabilidad asociado al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Tipo de responsabilidad"
+      Tipo : MANDATORY LADM_COL_v_1_0_0_Ext_NCA.NCA_ResponsabilidadTipo;
+    END NCA_Responsabilidad;
+
+    /** Contiene la información alfanumérica que caracteriza y describe la Unidad Administrativa Básica (UAB) asociada al nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) UAB Nacimiento de agua"
+    CLASS NCA_UAB_NacimientoAgua
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_UnidadAdministrativaBasica =
+      /** Contiene el nombre oficial asignado al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Nombre del nacimiento de agua"
+      Nombre_Nacimiento : TEXT*255;
+      /** Coordenada X del punto de afloramiento correspondiente al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Coordenada X"
+      Coordenada_X : 3681000.000 .. 5700000.000;
+      /** Coordenada Y del punto de afloramiento correspondiente al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Coordenada Y"
+      Coordenada_Y : 1080000.000 .. 3310000.000;
+      /** Contiene el radio de protección del nacimiento de agua, expresado en metros (m), cuyo valor debe ser mayor o igual a 100 m.
+       */
+      !!@ ili2db.dispName="Radio de protección"
+      Radio_Proteccion : 0.000 .. 10000.000;
+      /** Fecha en la que se identifica o registra el nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Fecha de identificación"
+      Fecha_Identificacion_Nacimiento : INTERLIS.XMLDate;
+      /** Contiene observaciones o información relevante relacionada con la migración e identificación del nacimiento de agua.
+       */
+      Observaciones : MTEXT*500;
+    END NCA_UAB_NacimientoAgua;
+
+    /** Unidad Espacial del nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(NCA) UE Nacimiento de agua"
+    CLASS NCA_UE_NacimientoAgua
+    EXTENDS LADM_COL_v_4_0_1_Nucleo.LADM_Nucleo.COL_UnidadEspacial =
+    END NCA_UE_NacimientoAgua;
+
+  END NCA;
+
+END LADM_COL_v_1_0_0_Ext_NCA.

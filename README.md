@@ -1,2 +1,18 @@
-# af_ms_to_ladm_nca
-ETL para airflow que transforma los datos del objeto territorial de nacimientos de agua del modelo simplificado al modelo extendido LADM_COL.
+# ETL OTL de Nacimientos de agua.
+ETL para airflow que transforma los datos del modelo simplificado de nacimientos de agua al modelo extendio LADM_COL de nacimientos de agua.
+
+
+```
+.
+├── config
+│   └── etl_config
+│       └── ms_to_ladm_nca
+├── dags
+│   └── ms_to_ladm_nca
+├── logic
+│   └── ms_to_ladm_nca
+│       └── sql
+│       └── resources
+└── output
+    └── ms_to_ladm_nca
+```

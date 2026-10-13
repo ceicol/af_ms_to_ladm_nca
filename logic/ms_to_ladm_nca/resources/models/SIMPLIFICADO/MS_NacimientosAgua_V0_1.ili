@@ -1,0 +1,98 @@
+INTERLIS 2.3;
+
+/** Modelo simplificado de Nacimientos de agua. 
+ * 
+ * El modelo simplificado de Nacimientos de agua permite gestionar la información relativa a la identificación, localización y delimitación de los nacimientos y afloramientos de agua del territorio nacional, estandarizando los dominios, atributos y relaciones asociados al punto de afloramiento, su área forestal protectora, con el objetivo de facilitar el intercambio de datos entre las autoridades ambientales, los entes territoriales y los demás niveles sectoriales que intervienen en la protección de los nacimientos de agua.
+ */
+!!@ technicalContact="Dirección de Gestión Integral del Recurso Hídrico"
+MODEL MS_NacimientosAgua_V0_1 (es)
+AT "mailto:recursohidrico@minambiente.gov.co"
+VERSION "0.0.1"  =
+  IMPORTS ISO19107_PLANAS_V3_1;
+
+  TOPIC MS_NCA =
+    OID AS INTERLIS.UUIDOID;
+
+    DOMAIN
+
+      /** Define el acto administrativo asociado al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="(MS NCA) Tipo de Fuente Administrativa"
+      MS_NCA_FuenteAdministrativaTipo = (
+        !!@ ili2db.dispName="Documento público"
+        Documento_Publico(
+          /** Decisión administrativa emitida por una autoridad administrativa en ejercicio de sus funciones, que tiene efectos jurídicos dentro de su ámbito de competencia. Las resoluciones se utilizan para regular, interpretar, aplicar o ejecutar disposiciones legales o reglamentarias y son de carácter obligatorio para las personas o entidades a las que se dirigen.
+           */
+          !!@ ili2db.dispName="(Documento público) Resolución"
+          Resolucion
+        )
+      );
+
+    /** Autoridad ambiental que gestiona la información del nacimiento de agua.
+     */
+    !!@ ili2db.dispName="(MS NCA) Autoridad ambiental"
+    CLASS MS_NCA_AutoridadAmbiental =
+      /** Número de documento de la autoridad ambiental.
+       */
+      !!@ ili2db.dispName="Número de documento"
+      Numero_Documento : MANDATORY TEXT*20;
+      /** Nombre de la autoridad ambiental.
+       */
+      Nombre : TEXT*255;
+      /** Sigla de la autoridad ambiental.
+       */
+      Sigla : TEXT*20;
+    END MS_NCA_AutoridadAmbiental;
+
+    /** El Decreto 1076 de 2015, en el artículo 2.2.2.1.3.8, define los nacimientos de agua como ecosistemas estratégicos y exige a las autoridades ambientales adelantar acciones tendientes a su conservación y manejo, entre ellas la designación como áreas protegidas. Así mismo, incluye dentro de las áreas forestales protectoras aquellas que se determinen como de influencia sobre cabeceras y nacimientos de los ríos y quebradas, sean permanentes o no, y establece como obligación de los propietarios de estos predios mantener la cobertura boscosa de estas zonas y en la zonas periféricas.
+     * 
+     * Por otra parte, el Decreto 1077 de 2015, en su artículo 2.2.2.2.1.3, define como una de las categorías de protección en suelo rural las áreas de especial importancia ecosistémica, entre las cuales se incluyen los nacimientos de agua.
+     */
+    !!@ ili2db.dispName="(MS NCA) Nacimiento de agua"
+    CLASS MS_NCA_NacimientoAgua =
+      /** Contiene el nombre oficial asignado al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Nombre del nacimiento de agua"
+      Nombre : TEXT*255;
+      /** Coordenada X del punto de afloramiento correspondiente al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Coordenada X"
+      Coordenada_X : 3681000.000 .. 5700000.000;
+      /** Coordenada Y del punto de afloramiento correspondiente al nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Coordenada Y"
+      Coordenada_Y : 1080000.000 .. 3310000.000;
+      /** Contiene el radio de protección del nacimiento de agua, expresado en metros (m), cuyo valor debe ser mayor o igual a 100 m.
+       */
+      !!@ ili2db.dispName=Valor
+      Radio_Proteccion : 0.000 .. 10000.000;
+      /** Fecha en la que se identifica o registra el nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Fecha de identificación"
+      Fecha_Identificacion : INTERLIS.XMLDate;
+      /** Identifica el tipo de acto administrativo relacionado con el nacimiento de agua, ya sea para su identificación o para la adopción de la determinante ambiental.
+       */
+      !!@ ili2db.dispName="Tipo de fuente administrativa"
+      Tipo_Fuente_Administrativa : MANDATORY MS_NCA_FuenteAdministrativaTipo;
+      /** Nombre con el que se identifica la fuente administrativa relacionada con el nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Nombre fuente administrativa"
+      Nombre_Fuente_Administrativa : TEXT*255;
+      /** Fecha de expedición de la fuente administrativa relacionada con el nacimiento de agua.
+       */
+      !!@ ili2db.dispName="Fecha fuente administrativa"
+      Fecha_Fuente_Administrativa : INTERLIS.XMLDate;
+      !!@ ili2db.dispName="URL fuente administrativa"
+      URL_Fuente_Administrativa : TEXT*4096;
+      /** Contiene observaciones o información relevante relacionada con la migración e identificación del nacimiento de agua.
+       */
+      Observaciones : MTEXT*500;
+      /** Almacena la representación espacial del radio de protección asociado al nacimiento de agua, mediante una geometría de tipo polígono.
+       */
+      !!@ ili2db.dispName=Geometría
+      Geometria : MANDATORY ISO19107_PLANAS_V3_1.GM_MultiSurface2D;
+    END MS_NCA_NacimientoAgua;
+
+  END MS_NCA;
+
+END MS_NacimientosAgua_V0_1.
