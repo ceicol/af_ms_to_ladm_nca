@@ -17,7 +17,7 @@ insert into nca_fuenteadministrativa (
     etl_nacimientoagua_id
 )
 select
-    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket tidb where topic  = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
     uuid_generate_v4() as t_ili_tid,
     tipo_fuente_administrativa as tipo,
     'Disponible' as estado_disponibilidad,

@@ -78,16 +78,16 @@ with DAG(
         task_import_schema_ladm(PROCESS_ID) >>
         
         # Inicia transformación de datos al modelo LADM_COL
-        task_preparar_estructura_etl(PROCESS_ID) >>
-        task_migrar_interesados(PROCESS_ID) >>
-        task_migrar_fuentes_administrativas(PROCESS_ID) >>
-        task_migrar_unidad_administrativa(PROCESS_ID) >>
-        task_migrar_unidad_espacial(PROCESS_ID) >>
-        task_diligenciar_relacion_entre_unidad_administrativa_y_espacial(PROCESS_ID) >>
-        task_crear_estructura_col_area_valor(PROCESS_ID) >>
-        task_crear_agrupacion_interesados(PROCESS_ID) >>
-        task_crear_responsabilidades(PROCESS_ID) >>
-        task_diligenciar_relacion_col_rrrfuente(PROCESS_ID) >>
+        task_preparar_estructura_etl(POSTGRES_CONN_ID) >>
+        task_migrar_interesados(POSTGRES_CONN_ID) >>
+        task_migrar_fuentes_administrativas(POSTGRES_CONN_ID) >>
+        task_migrar_unidad_administrativa(POSTGRES_CONN_ID) >>
+        task_migrar_unidad_espacial(POSTGRES_CONN_ID) >>
+        task_diligenciar_relacion_entre_unidad_administrativa_y_espacial(POSTGRES_CONN_ID) >>
+        task_crear_estructura_col_area_valor(POSTGRES_CONN_ID) >>
+        task_crear_agrupacion_interesados(POSTGRES_CONN_ID) >>
+        task_crear_responsabilidades(POSTGRES_CONN_ID) >>
+        task_diligenciar_relacion_col_rrrfuente(POSTGRES_CONN_ID) >>
         # Finaliza transformación de datos al modelo LADM_COL
 
         task_export_xtf_ladm(PROCESS_ID) >>

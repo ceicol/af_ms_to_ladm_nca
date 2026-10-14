@@ -16,13 +16,13 @@ insert into nca_ue_nacimientoagua (
     etl_nacimientoagua_id
 )
 select
-    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket tidb where topic  = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
     uuid_generate_v4() as t_ili_tid,
     nombre as etiqueta,
     'En_Rasante' as relacion_superficie,
-    st_force3d(m.geometria) as geometria,
+    st_force3d(geometria) as geometria,
     now() as comienzo_vida_util_version,
     'nca_ue_nacimientoagua' as espacio_de_nombres,
-    row_number() over (order by m.t_id)::text as local_id,
+    row_number() over (order by t_id)::text as local_id,
     t_id as etl_nacimientoagua_id
 from ms_nca_nacimientoagua;

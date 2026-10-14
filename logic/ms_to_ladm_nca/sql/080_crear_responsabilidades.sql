@@ -30,7 +30,7 @@ insert into nca_responsabilidad (
     local_id
 )
 select
-    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket tidb where topic  = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
     'Identificar' as tipo,
     'Identificacion del nacimiento de agua ' || uab.nombre_nacimiento as descripcion,
     interesado as interesado_nca_interesado,
@@ -38,6 +38,6 @@ select
     uab.t_id as unidad,
     now() as comienzo_vida_util_version,
     'nca_responsabilidad' as espacio_de_nombres,
-    row_number() over (order by uab.t_id)::text as local_id,
+    row_number() over (order by uab.t_id)::text as local_id
 from nca_uab_nacimientoagua uab
 cross join interesado_responsable;

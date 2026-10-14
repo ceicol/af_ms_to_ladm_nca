@@ -10,7 +10,7 @@ insert into col_rrrfuente (
     rrr_nca_responsabilidad
 )
 select distinct
-    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket tidb where topic  = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
     f.t_id as fuente_administrativa,
     r.t_id as rrr_nca_responsabilidad
 from nca_responsabilidad r
