@@ -9,26 +9,27 @@ from airflow.providers.standard.operators.empty import EmptyOperator
 from config.etl_config.ms_to_ladm_nca.config import (
     DAG_NAME,
     DAG_DESCRIPTION,
-    ETL_TAGS
+    ETL_TAGS,
+    ETL_TASKS,
+    ETL_NAME,
+    SIMPLIFIED_MODEL_NAME,
+    LADM_COL_MODEL_NAME,
+    SIMPLIFIED_MODEL_EXAMPLE_XTF,
 )
 
-from logic.ms_to_ladm_nca.models import (
-    task_import_schema_ms,
-    task_import_schema_ladm,
-    task_import_data_ms,
-    task_export_xtf_ladm,
+from logic.models import (
+    import_schema_ms_task,
+    import_schema_ladm_task,
+    import_data_ms_task,
+    export_xtf_ladm_task,
 )
 
-from logic.ms_to_ladm_nca.workflow import (
+from utils.workflow_util import (
     create_etl_tasks,
-    task_download_xtf,
+    check_db_connection_task,
+    download_xtf_task,
+    publish_s3_xtf_ladm_task,
 )
-
-from utils.tasks_utils import (
-    task_validar_conexion,
-)
-
-from logic.ms_to_ladm_nca.io import task_publish_s3_xtf_ladm
 
 # Leer el nombre de la conexión desde la variable de entorno
 POSTGRES_CONN_ID = os.getenv("POSTGRES_CONN_ID", "terrainfo_etl")
@@ -49,7 +50,7 @@ with DAG(
             description="Identificador único del proceso"
         ),
         "xtf_path": Param(
-            default='https://terrainfo.nyc3.cdn.digitaloceanspaces.com/OTLS/ms_nca.xtf',
+            default=SIMPLIFIED_MODEL_EXAMPLE_XTF,
             type="string",
             description="URL del XTF a procesar"
         ),
@@ -58,32 +59,32 @@ with DAG(
     template_searchpath="/opt/airflow/logic"  # Ruta en la cual es buscada los archivos SQL al aplicar jinja
 ) as dag:
 
-    etl_tasks_ms_to_ladm = create_etl_tasks(POSTGRES_CONN_ID)
+    tasks_etl_ms_to_ladm = create_etl_tasks(POSTGRES_CONN_ID, ETL_TASKS)
 
     # Ejecución del ETL
     (
         EmptyOperator(task_id="inicio") >>
-        task_validar_conexion(postgres_conn_id=POSTGRES_CONN_ID) >>
-        task_download_xtf(PROCESS_ID, REMOTE_XTF_PATH) >>
-        task_import_schema_ms(PROCESS_ID) >>
-        task_import_data_ms(PROCESS_ID, REMOTE_XTF_PATH) >>
-        task_import_schema_ladm(PROCESS_ID) >>
+        check_db_connection_task(postgres_conn_id=POSTGRES_CONN_ID) >>
+        download_xtf_task(PROCESS_ID, REMOTE_XTF_PATH, ETL_NAME) >>
+        import_schema_ms_task(PROCESS_ID, ETL_NAME, SIMPLIFIED_MODEL_NAME) >>
+        import_data_ms_task(PROCESS_ID, ETL_NAME, SIMPLIFIED_MODEL_NAME) >>
+        import_schema_ladm_task(PROCESS_ID, ETL_NAME, LADM_COL_MODEL_NAME) >>
         
         # Inicia transformación de datos al modelo LADM_COL
         # Nota: El orden importa; debe corresponder al flujo de ejecución
         # del ETL para asegurar la integridad referencial de los datos.
-        etl_tasks_ms_to_ladm["preparar_estructura_etl"] >>
-        etl_tasks_ms_to_ladm["migrar_interesados"] >>
-        etl_tasks_ms_to_ladm["migrar_fuentes_administrativas"] >>
-        etl_tasks_ms_to_ladm["migrar_unidad_administrativa"] >>
-        etl_tasks_ms_to_ladm["migrar_unidad_espacial"] >>
-        etl_tasks_ms_to_ladm["diligenciar_relacion_entre_unidad_administrativa_y_espacial"] >>
-        etl_tasks_ms_to_ladm["crear_estructura_col_area_valor"] >>
-        etl_tasks_ms_to_ladm["crear_agrupacion_interesados"] >>
-        etl_tasks_ms_to_ladm["crear_responsabilidades"] >>
-        etl_tasks_ms_to_ladm["diligenciar_relacion_col_rrrfuente"] >>
+        tasks_etl_ms_to_ladm["preparar_estructura_etl"] >>
+        tasks_etl_ms_to_ladm["migrar_interesados"] >>
+        tasks_etl_ms_to_ladm["migrar_fuentes_administrativas"] >>
+        tasks_etl_ms_to_ladm["migrar_unidad_administrativa"] >>
+        tasks_etl_ms_to_ladm["migrar_unidad_espacial"] >>
+        tasks_etl_ms_to_ladm["diligenciar_relacion_entre_unidad_administrativa_y_espacial"] >>
+        tasks_etl_ms_to_ladm["crear_estructura_col_area_valor"] >>
+        tasks_etl_ms_to_ladm["crear_agrupacion_interesados"] >>
+        tasks_etl_ms_to_ladm["crear_responsabilidades"] >>
+        tasks_etl_ms_to_ladm["diligenciar_relacion_col_rrrfuente"] >>
 
-        task_export_xtf_ladm(PROCESS_ID) >>
-        task_publish_s3_xtf_ladm(PROCESS_ID) >>
+        export_xtf_ladm_task(PROCESS_ID, ETL_NAME, LADM_COL_MODEL_NAME) >>
+        publish_s3_xtf_ladm_task(PROCESS_ID, ETL_NAME) >>
         EmptyOperator(task_id="fin")
     )

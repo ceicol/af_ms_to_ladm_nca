@@ -4,9 +4,9 @@ SET search_path TO
 	public;
 
 
-alter table nca_fuenteadministrativa add column etl_nacimientoagua_id bigint;
-alter table nca_uab_nacimientoagua add column etl_nacimientoagua_id bigint;
-alter table nca_ue_nacimientoagua add column etl_nacimientoagua_id bigint;
+alter table nca_fuenteadministrativa add column if not exists etl_nacimientoagua_id bigint;
+alter table nca_uab_nacimientoagua add column if not exists etl_nacimientoagua_id bigint;
+alter table nca_ue_nacimientoagua add column if not exists etl_nacimientoagua_id bigint;
 
 -- Se crea el basket por defecto para el modelo LADM_COL
 INSERT INTO output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_dataset (t_id,datasetname)

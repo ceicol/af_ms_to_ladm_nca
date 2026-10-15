@@ -10,6 +10,9 @@ ETL_TAGS = [ETL_NAME, ETL_VERSION, "ETL", "LADM_COL", "OTL", "Nacimientos de agu
 SIMPLIFIED_MODEL_NAME = 'MS_NacimientosAgua_V0_1'
 LADM_COL_MODEL_NAME = 'LADM_COL_v_1_0_0_Ext_NCA'
 
+# XTF de ejemplo modelo simplificado
+
+SIMPLIFIED_MODEL_EXAMPLE_XTF = 'https://terrainfo.nyc3.cdn.digitaloceanspaces.com/OTLS/ms_nca.xtf'
 
 # ===========================================================================
 # ETL WORKFLOW
