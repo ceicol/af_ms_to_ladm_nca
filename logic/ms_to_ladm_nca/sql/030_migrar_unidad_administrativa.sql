@@ -1,9 +1,11 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- NCA_UAB_NacimientoAgua  <-  MS_NCA_NacimientoAgua
+--========================================================================
 insert into nca_uab_nacimientoagua (
     t_basket,
     t_ili_tid,

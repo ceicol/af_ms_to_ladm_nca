@@ -1,25 +1,31 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- NCA_Responsabilidad: la autoridad ambiental identifica el nacimiento de agua
+-- Una responsabilidad por nacimiento: se vincula al unico interesado o a la
+-- agrupacion de sus miembros. Sin interesados no se crean responsabilidades.
+-- col_rrrInteresado esta integrada en estas dos columnas del DRR por ili2pg.
+--========================================================================
 with interesado_responsable as (
     select
-        i.t_id as interesado,
+        t_id as interesado,
         null::bigint as agrupacion
-    from nca_interesado i
+    from nca_interesado
     where (select count(*) from nca_interesado) = 1
     union all
     select
         null::bigint,
-        cm.agrupacion
-    from col_miembros cm
-    group by cm.agrupacion
-    having count(distinct cm.interesado_nca_interesado) > 1
+        agrupacion
+    from col_miembros
+    group by agrupacion
+    having count(distinct interesado_nca_interesado) > 1
 )
 insert into nca_responsabilidad (
     t_basket,
+    t_ili_tid,
     tipo,
     descripcion,
     interesado_nca_interesado,
@@ -31,6 +37,7 @@ insert into nca_responsabilidad (
 )
 select
     (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    uuid_generate_v4() as t_ili_tid,
     'Identificar' as tipo,
     'Identificacion del nacimiento de agua ' || uab.nombre_nacimiento as descripcion,
     interesado as interesado_nca_interesado,

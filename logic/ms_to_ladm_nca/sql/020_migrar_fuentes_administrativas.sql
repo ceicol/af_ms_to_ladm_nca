@@ -1,9 +1,12 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- NCA_FuenteAdministrativa  <-  datos de fuente de MS_NCA_NacimientoAgua
+--   etl_nacimientoagua_id conserva el t_id del nacimiento para los cruces.
+--========================================================================
 insert into nca_fuenteadministrativa (
     t_basket,
     t_ili_tid,

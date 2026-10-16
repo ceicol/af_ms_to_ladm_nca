@@ -1,9 +1,12 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- NCA_UE_NacimientoAgua  <-  geometria de MS_NCA_NacimientoAgua
+--   El area se registra en COL_AreaValor, como define el modelo.
+--========================================================================
 insert into nca_ue_nacimientoagua (
     t_basket,
     t_ili_tid,

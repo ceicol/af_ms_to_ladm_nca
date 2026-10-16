@@ -1,8 +1,11 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
+--========================================================================
+-- COL_UEBaUnit: unidad espacial  ->  unidad administrativa basica
+--========================================================================
 insert into col_uebaunit (
     t_basket,
     ue,

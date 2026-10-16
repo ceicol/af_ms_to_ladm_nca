@@ -1,8 +1,11 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
+--============================================================================================
+-- NCA_Interesado  <-  MS_NCA_AutoridadAmbiental
+--============================================================================================
 insert into nca_interesado (
     t_basket,
     t_ili_tid,

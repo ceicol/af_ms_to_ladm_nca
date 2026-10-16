@@ -1,9 +1,12 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- COL_RRRFuente: fuente administrativa de cada responsabilidad
+--   La unidad de la responsabilidad identifica el nacimiento de origen.
+--========================================================================
 insert into col_rrrfuente (
     t_basket,
     fuente_administrativa,

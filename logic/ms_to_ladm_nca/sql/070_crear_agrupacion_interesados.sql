@@ -1,9 +1,12 @@
-SET search_path TO 	
-	input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-	output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
-	public;
+SET search_path TO
+    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
+    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    public;
 
-
+--========================================================================
+-- Agrupacion de autoridades ambientales: se crea solo si hay mas de un interesado.
+-- Los miembros son los interesados reales importados del modelo simplificado.
+--========================================================================
 with nueva_agrupacion as (
     insert into nca_agrupacioninteresados (
         t_basket,
