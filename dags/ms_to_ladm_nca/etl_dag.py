@@ -7,7 +7,6 @@ from airflow.sdk import Param
 from airflow.providers.standard.operators.empty import EmptyOperator
 
 from config.etl_config.ms_to_ladm_nca.config import (
-    DAG_NAME,
     DAG_DESCRIPTION,
     ETL_TAGS,
     ETL_TASKS,
@@ -37,7 +36,7 @@ PROCESS_ID = "{{ dag_run.conf.get('process_id', params.process_id) }}"
 REMOTE_XTF_PATH = "{{ dag_run.conf.get('xtf_path', params.xtf_path) }}"
 
 with DAG(
-    dag_id=DAG_NAME,
+    dag_id=ETL_NAME,
     description=DAG_DESCRIPTION,
     start_date=datetime(2024, 1, 1),
     schedule=None,  # Solo ejecución manual
