@@ -1,6 +1,7 @@
+{% set process_id = dag_run.conf.get('process_id', params.process_id) %}
 SET search_path TO
-    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    input_{{ process_id }}, -- Schema modelo simplificado
+    output_{{ process_id }}, -- schema modelo LADM extendido
     public;
 
 --========================================================================
@@ -12,7 +13,7 @@ insert into col_uebaunit (
     baunit
 )
 select
-    (select t_id from output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
+    (select t_id from output_{{ process_id }}.t_ili2db_basket where topic = 'LADM_COL_v_1_0_0_Ext_NCA.NCA' limit 1) as t_basket,
     ue.t_id as ue,
     uab.t_id as baunit
 from nca_ue_nacimientoagua ue
