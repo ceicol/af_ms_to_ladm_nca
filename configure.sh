@@ -14,7 +14,9 @@ log() {
 }
 
 fallar() {
-    log "ERROR" "$1"
+    local mensaje="$1"
+
+    log "ERROR" "$mensaje"
     exit 1
 }
 

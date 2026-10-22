@@ -1,0 +1,440 @@
+
+1.0PythonFrontend"1792687833168*py2.B­
+
+imports1
+
+extends2
+
+returns3
+
+	has param4
+
+
+calls5
+
+module6
+
+
+class7
+
+method8
+
+function9
+$
+dags/ms_to_ladm_nca/etl_dag.py11
+
+etl_dag13
+
+os14
+
+
+uuid16
+
+datetime18
+
+airflow20
+
+airflow.sdk.Param22
+
+airflow.sdk24
+>
+8airflow.providers.standard.operators.empty.EmptyOperator26
+0
+*airflow.providers.standard.operators.empty28
+=
+7config.etl_config.ms_to_ladm_nca.config.DAG_DESCRIPTION30
+6
+0config.etl_config.ms_to_ladm_nca.config.ETL_TAGS32
+7
+1config.etl_config.ms_to_ladm_nca.config.ETL_TASKS34
+6
+0config.etl_config.ms_to_ladm_nca.config.ETL_NAME36
+C
+=config.etl_config.ms_to_ladm_nca.config.SIMPLIFIED_MODEL_NAME38
+A
+;config.etl_config.ms_to_ladm_nca.config.LADM_COL_MODEL_NAME40
+J
+Dconfig.etl_config.ms_to_ladm_nca.config.SIMPLIFIED_MODEL_EXAMPLE_XTF42
+-
+'config.etl_config.ms_to_ladm_nca.config44
+(
+"logic.models.import_schema_ms_task46
+*
+$logic.models.import_schema_ladm_task48
+&
+ logic.models.import_data_ms_task50
+'
+!logic.models.export_xtf_ladm_task52
+
+logic.models54
+*
+$utils.workflow_util.create_etl_tasks56
+2
+,utils.workflow_util.check_db_connection_task58
++
+%utils.workflow_util.download_xtf_task60
+2
+,utils.workflow_util.publish_s3_xtf_ladm_task62
+
+utils.workflow_util64
+
+	os.getenv66
+
+airflow.models.dag.DAG68
+
+datetime.datetime70
+	
+str72
+
+
+uuid.uuid474
+
+ARG_076
+
+POSTGRES_CONN_ID77
+
+ARG_178
+
+terrainfo_etl79
+
+ARG_template_searchpath80
+
+/opt/airflow/logic81
+
+
+202482
+
+183
+
+ARG_284
+
+ARG_type85
+
+string86
+
+ARG_description87
+&
+ Identificador Ãºnico del proceso88
+
+URL del XTF a procesar89
+
+ARG_task_id90
+
+inicio91
+=
+7{{ dag_run.conf.get('process_id', params.process_id) }}92
+9
+3{{ dag_run.conf.get('xtf_path', params.xtf_path) }}93
+	
+fin94J
+
+10
+
+1011 jð
+!
+12
+12136 *
+10 (
+
+15
+15146
+
+17
+17166
+
+19
+19186
+
+21
+21206
+
+23
+23229
+
+25
+25246
+
+27
+27269
+
+29
+29286
+
+31
+31306
+
+33
+33326
+
+35
+35346
+
+37
+37366
+
+39
+39386
+
+41
+41406
+
+43
+43426
+
+45
+45446
+
+47
+47469
+
+49
+49489
+
+51
+51509
+
+53
+53529
+
+55
+55546
+
+57
+57569
+
+59
+59589
+
+61
+61609
+
+63
+63629
+
+65
+65646
+
+67
+67669
+
+69
+69687
+
+71
+71707
+
+73
+73727
+
+75
+75749r‡
+
+12151*
+10 (
+
+
+12171*
+10 (
+
+12191*
+10 (
+
+12211*
+10 (
+
+12231*
+10 (
+
+12251*
+10 (
+
+12271*
+108 (E
+
+12291*
+10 (E
+
+12311*
+10
+ 
+(
+
+12331*
+10 (
+
+12351*
+10 (
+
+12371*
+10 (
+
+12391*
+10 (
+
+12411*
+10 (
+
+12431*
+10 (!
+
+12451*
+10	 (!
+
+12471*
+10 (
+
+12491*
+10 (
+
+12511*
+10 (
+
+12531*
+10 (
+
+12551*
+10 (
+
+12571*
+10 (
+
+12591*
+10 (
+
+12611*
+10 (
+
+12631*
+10 (
+
+12651*
+10 (
+3
+12675*
+10" "(B2
+
+
+76
+77
+
+
+78
+79
+'
+12695*
+10& ;(2
+
+
+80
+81
+?
+12715*
+10) )($2$
+
+
+76
+82
+
+
+78
+83
+
+
+84
+83
+3
+12235*
+10. 2(
+2
+
+
+85
+86
+
+
+87
+88
+
+12735*
+10/ /(*
+
+12755*
+10/ /(%
+3
+12235*
+103 7(
+2
+
+
+85
+86
+
+
+87
+89
+
+12575*
+10= =(I
+'
+12275*
+10A	 A((2
+
+
+90
+91
+
+12595*
+10B	 B(D
+3
+12615*
+10C	 C(A2
+
+
+76
+92
+
+
+78
+93
+'
+12475*
+10D	 D(K2
+
+
+76
+92
+'
+12515*
+10E	 E(I2
+
+
+76
+92
+'
+12495*
+10F	 F(K2
+
+
+76
+92
+'
+12535*
+10V	 V(H2
+
+
+76
+92
+'
+12635*
+10W	 W(72
+
+
+76
+92
+'
+12275*
+10X	 X(%2
+
+
+90
+94
