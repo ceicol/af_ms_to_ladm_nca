@@ -1,3 +1,4 @@
+{% set process_id = dag_run.conf.get('process_id', params.process_id) %}
 --====================================================
 -- Creación de la extensión postgis
 --====================================================
@@ -30,26 +31,26 @@ on conflict (srid) do nothing;
 --========================================
 -- Esquemas de trabajo (solo se crean si no existen)
 --========================================
-create schema if not exists input_{{ dag_run.conf.get('process_id', params.process_id) }};
-create schema if not exists output_{{ dag_run.conf.get('process_id', params.process_id) }};
+create schema if not exists input_{{ process_id }};
+create schema if not exists output_{{ process_id }};
 
 SET search_path TO
-    input_{{ dag_run.conf.get('process_id', params.process_id) }}, -- Schema modelo simplificado
-    output_{{ dag_run.conf.get('process_id', params.process_id) }}, -- schema modelo LADM extendido
+    input_{{ process_id }}, -- Schema modelo simplificado
+    output_{{ process_id }}, -- schema modelo LADM extendido
     public;
 
 --============================================================================================
 -- Dataset y basket del topic LADM.
 --============================================================================================
 
-insert into output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_dataset (
+insert into output_{{ process_id }}.t_ili2db_dataset (
     t_id,
     datasetname
 )
 VALUES (1,'Baseset');
 
 
-insert into output_{{ dag_run.conf.get('process_id', params.process_id) }}.t_ili2db_basket (
+insert into output_{{ process_id }}.t_ili2db_basket (
     t_id,
     dataset,
     topic,
@@ -61,7 +62,7 @@ VALUES (
     1,
     'LADM_COL_v_1_0_0_Ext_NCA.NCA',
     uuid_generate_v4(),
-    'output_{{ dag_run.conf.get('process_id', params.process_id) }}'
+    'output_{{ process_id }}'
 );
 
 
