@@ -1,7 +1,0 @@
-organization=cesarbasurto
-projectKey=cesarbasurto_af_ms_to_ladm_nca_sonar
-serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.113727
-dashboardUrl=https://sonarcloud.io/dashboard?id=cesarbasurto_af_ms_to_ladm_nca_sonar
-ceTaskId=AaFkhaXU29uZdraJtM0M
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AaFkhaXU29uZdraJtM0M
